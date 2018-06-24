@@ -1,0 +1,19 @@
+
+ext.deps = [:]
+def versions = [:]
+versions.support = "27.1.1"
+versions.room = "1.1.0"
+def deps = [:]
+
+def support = [:]
+support.appcompat = "com.android.support:appcompat-v7:$versions.support"
+support.recyclerview = "com.android.support:recyclerview-v7:$versions.support"
+support.design = "com.android.support:design:$versions.support"
+deps.support = support
+
+def room = [:]
+room.runtime = "android.arch.persistence.room:runtime:$versions.room"
+room.compiler = "android.arch.persistence.room:compiler:$versions.room"
+deps.room = room
+
+ext.deps = deps

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WikiSample</string>
+    <string name="no_search_history">No search history</string>
+</resources>

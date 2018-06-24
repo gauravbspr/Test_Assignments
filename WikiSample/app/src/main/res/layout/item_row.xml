@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data class="ItemBinding">
+        <variable
+            name="item"
+            type="com.example.shashank.wikisample.ViewModel.ItemViewModel"/>
+        <variable
+            name="event"
+            type="com.example.shashank.wikisample.Presenter.ClickEvent"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="@{(v)->event.onClick()}">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/default_padding">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/tumbnail_size"
+                android:layout_height="@dimen/tumbnail_size"
+                android:src="@drawable/ic_launcher_foreground"
+                android:padding="@dimen/thumbnail_padding"
+                android:background="@drawable/ic_launcher_background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/default_padding"
+                android:layout_marginRight="@dimen/default_padding">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@{item.name}"
+                    android:textColor="@color/default_text_color"
+                    android:textSize="@dimen/heading_text_size"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/default_text_size"
+                    android:text="@{item.description}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height=".5dp"
+            android:background="@color/gray"/>
+    </LinearLayout>
+</layout>
