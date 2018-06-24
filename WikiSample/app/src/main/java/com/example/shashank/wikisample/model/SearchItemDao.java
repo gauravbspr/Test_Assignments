@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.database.Cursor;
 
+import static com.example.shashank.wikisample.model.SearchItem.ITEM_COLUMN_ID;
 import static com.example.shashank.wikisample.model.SearchItem.SEARCH_ITEM_TABLE;
 
 @Dao
@@ -21,6 +22,8 @@ public interface SearchItemDao {
 	void insert(SearchItem item);
 
 	@Delete
-	void delete(SearchItem item);
+	int delete(SearchItem... items);
 
+//	@Query("DELETE FROM "+SEARCH_ITEM_TABLE+" WHERE "+ITEM_COLUMN_ID+" = :id")
+//	void delete(int id);
 }

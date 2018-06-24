@@ -74,4 +74,12 @@ public class WebViewActivity extends AppCompatActivity {
 			return null;
 		}
 	}
+
+	@Override
+	public void onBackPressed() {
+		if(activityBinding.webView.canGoBack())
+			activityBinding.webView.goBack();
+		else
+			super.onBackPressed();
+	}
 }

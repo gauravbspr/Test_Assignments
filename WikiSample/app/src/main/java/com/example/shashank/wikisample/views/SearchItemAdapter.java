@@ -1,19 +1,24 @@
 package com.example.shashank.wikisample.views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shashank.wikisample.Presenter.ClickEvent;
+import com.example.shashank.wikisample.R;
 import com.example.shashank.wikisample.Utility.Utils;
 import com.example.shashank.wikisample.ViewModel.ItemViewModel;
 import com.example.shashank.wikisample.WebViewActivity;
+import com.example.shashank.wikisample.database.ItemDatabase;
 import com.example.shashank.wikisample.databinding.ItemBinding;
+import com.example.shashank.wikisample.model.SearchItem;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -24,13 +29,15 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 
 	private ImageLoader imageLoader;
 	public ArrayList<ItemViewModel> data;
-	private Context context;
+	private Activity activity;
 	private LayoutInflater inflater;
+	private ItemDatabase db;
 
-	public SearchItemAdapter(ArrayList<ItemViewModel> data, Context context) {
+	public SearchItemAdapter(ArrayList<ItemViewModel> data, Activity activity) {
 		this.data = data;
-		this.context = context;
-		imageLoader = Utils.getImageLoader(context);
+		this.activity = activity;
+		imageLoader = Utils.getImageLoader(activity.getApplicationContext());
+		db = ItemDatabase.getInstance(activity.getApplicationContext());
 	}
 
 	@NonNull
@@ -44,7 +51,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 
 	@Override
 	public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-		holder.bind(data.get(position));
+		holder.bind(data.get(position),position);
 	}
 
 	@Override
@@ -62,19 +69,57 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 			this.itemBinding = itemBinging;
 		}
 
-		public void bind(final ItemViewModel item){
+		public void bind(final ItemViewModel item, final int position){
 			itemBinding.setItem(item);
 			itemBinding.setEvent(new ClickEvent() {
 				@Override
 				public void onClick() {
-					context.startActivity(new Intent(context, WebViewActivity.class).putExtra(KEY,item.toString()));
+					activity.startActivity(new Intent(activity, WebViewActivity.class).putExtra(KEY,item.toString()));
 				}
 			});
-
-
+			itemBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					if(item.isLocal())
+						return handlePopup(v,position);
+					return false;
+				}
+			});
 			if(item.getThumbnail() != null && !item.getThumbnail().isEmpty())
 				imageLoader.displayImage(item.getThumbnail(),itemBinding.image);
 		}
 
+	}
+
+	private boolean handlePopup(View v, final int position) {
+		final android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(activity, v);
+
+		popupMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+
+			@SuppressLint("StaticFieldLeak")
+			@Override
+			public boolean onMenuItemClick(MenuItem arg0) {
+				switch (arg0.getItemId()) {
+					case R.id.item_delete:
+						new AsyncTask<Void,Void,Void>(){
+							@Override
+							protected Void doInBackground(Void... voids) {
+								db.itemDao().delete(data.get(position).getItem());
+								return null;
+							}
+						}.execute();
+						data.remove(position);
+						notifyItemRemoved(position);
+						return true;
+					default:
+						return false;
+				}
+			}
+
+		});
+
+		popupMenu.inflate(R.menu.popup_delete);
+		popupMenu.show();
+		return false;
 	}
 }

@@ -49,7 +49,8 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 	private void setView(){
 		setSupportActionBar(activityBinding.toolbar);
 		dataItems = new ArrayList<>();
-		adapter = new SearchItemAdapter(dataItems,getApplicationContext());
+		adapter = new SearchItemAdapter(dataItems,LandingActivity.this);
+		activityBinding.searchView.setQueryHint(getString(R.string.search));
 		activityBinding.recyclerView.setAdapter(adapter);
 		activityBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
@@ -80,6 +81,10 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 		});
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
 
 	private void runNetworkOperation(String keyword){
 		if (operation != null){

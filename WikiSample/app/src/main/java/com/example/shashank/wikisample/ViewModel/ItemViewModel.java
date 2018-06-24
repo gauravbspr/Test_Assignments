@@ -18,12 +18,17 @@ public class ItemViewModel extends BaseObservable {
 	private String name;
 	private String thumbnail;
 	private String description;
+	private boolean local;
+
+	private SearchItem item;
 
 	public ItemViewModel(SearchItem item) {
+		this.item = item;
 		this.id = item.getId();
 		this.name = item.getName();
 		this.thumbnail = item.getThumbnail();
 		this.description = item.getDescription();
+		local = false;
 	}
 
 	public String toString(){
@@ -37,6 +42,14 @@ public class ItemViewModel extends BaseObservable {
 			e.printStackTrace();
 		}
 		return object.toString();
+	}
+
+	public boolean isLocal() {
+		return local;
+	}
+
+	public void setLocal(boolean local) {
+		this.local = local;
 	}
 
 	public int getId() {
@@ -69,5 +82,9 @@ public class ItemViewModel extends BaseObservable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public SearchItem getItem() {
+		return item;
 	}
 }
