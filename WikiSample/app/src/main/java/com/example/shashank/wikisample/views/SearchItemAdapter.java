@@ -82,7 +82,6 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 
 				@Override
 				public boolean onLongClick() {
-					Log.e("position-->",position+"");
 					if(item.isLocal()) {
 						handlePopup(itemBinding.getRoot(), position);
 						return false;

@@ -22,17 +22,24 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:indeterminate="true"
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:visibility="@{visibility ? View.VISIBLE : View.GONE}"/>
+            android:layout_height="match_parent">
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:indeterminate="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="-4dp"
+                android:layout_marginTop="-4dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_alignParentTop="true"
+                android:visibility="@{visibility ? View.VISIBLE : View.GONE}"/>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

@@ -86,14 +86,19 @@ public class SearchItem {
 	}
 
 	public SearchItem(ContentValues values){
-		if(values.containsKey(_ID))
-			this.id = values.getAsInteger(_ID);
-		if(values.containsKey(NAME))
-			this.name = values.getAsString(NAME);
-		if(values.containsKey(THUMBNAIL))
-			this.thumbnail = values.getAsString(THUMBNAIL);
-		if (values.containsKey(DESCRIPTION))
-			this.description = values.getAsString(DESCRIPTION);
+		if(values !=null) {
+			if (values.containsKey(_ID))
+				this.id = values.getAsInteger(_ID);
+			if (values.containsKey(NAME))
+				this.name = values.getAsString(NAME);
+			if (values.containsKey(THUMBNAIL))
+				this.thumbnail = values.getAsString(THUMBNAIL);
+			if (values.containsKey(DESCRIPTION))
+				this.description = values.getAsString(DESCRIPTION);
+		}else{
+			this.thumbnail = "";
+			this.description = "";
+		}
 	}
 
 	public ContentValues getContentValue(){
