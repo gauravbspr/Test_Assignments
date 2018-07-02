@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+import static android.support.v7.widget.PopupMenu.*;
 import static com.example.shashank.wikisample.Utility.AppConstants.KEY;
 
 public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.ItemViewHolder>{
@@ -76,12 +79,14 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 				public void onClick() {
 					activity.startActivity(new Intent(activity, WebViewActivity.class).putExtra(KEY,item.toString()));
 				}
-			});
-			itemBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+
 				@Override
-				public boolean onLongClick(View v) {
-					if(item.isLocal())
-						return handlePopup(v,position);
+				public boolean onLongClick() {
+					Log.e("position-->",position+"");
+					if(item.isLocal()) {
+						handlePopup(itemBinding.getRoot(), position);
+						return false;
+					}
 					return false;
 				}
 			});
@@ -91,10 +96,10 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 
 	}
 
-	private boolean handlePopup(View v, final int position) {
-		final android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(activity, v);
+	private void handlePopup(View v,final int position) {
+		PopupMenu popupMenu = new PopupMenu(activity, v);
+		popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-		popupMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
 
 			@SuppressLint("StaticFieldLeak")
 			@Override
@@ -107,19 +112,22 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 								db.itemDao().delete(data.get(position).getItem());
 								return null;
 							}
+
+							@Override
+							protected void onPostExecute(Void aVoid) {
+								super.onPostExecute(aVoid);
+								data.remove(position);
+								notifyItemRemoved(position);
+							}
 						}.execute();
-						data.remove(position);
-						notifyItemRemoved(position);
-						return true;
+						return false;
 					default:
 						return false;
 				}
 			}
 
 		});
-
 		popupMenu.inflate(R.menu.popup_delete);
 		popupMenu.show();
-		return false;
 	}
 }

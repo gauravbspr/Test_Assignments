@@ -1,5 +1,7 @@
 package com.example.shashank.wikisample;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -18,6 +20,7 @@ import com.example.shashank.wikisample.model.SearchItem;
 
 import static com.example.shashank.wikisample.Utility.AppConstants.BASE_PAGE_URL;
 import static com.example.shashank.wikisample.Utility.AppConstants.KEY;
+import static com.example.shashank.wikisample.provider.CustomContentProvider.URI_SEARCH_ITEM;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -35,7 +38,7 @@ public class WebViewActivity extends AppCompatActivity {
 		initializeView();
 		String url = BASE_PAGE_URL+keyItem.getName();
 		activityBinding.webView.loadUrl(url);
-		new InsertItem(keyItem,getApplicationContext()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,null);
+		insetItem(keyItem);
 	}
 
 	private void initializeView(){
@@ -56,24 +59,17 @@ public class WebViewActivity extends AppCompatActivity {
 		});
 	}
 
-	static class InsertItem extends AsyncTask<Void,Void,Void>{
-		private SearchItem item;
-		private Context context;
-		public InsertItem(SearchItem item, Context context){
-			this.item = item;
-			this.context = context;
-		}
-		@Override
-		protected Void doInBackground(Void... voids) {
-			try {
-				ItemDatabase db = ItemDatabase.getInstance(context);
-				db.itemDao().insert(item);
-			}catch (Exception e) {
-				e.printStackTrace();
+	@SuppressLint("StaticFieldLeak")
+	private void insetItem(final SearchItem item){
+		new AsyncTask<Void,Void,Void>(){
+			@Override
+			protected Void doInBackground(Void... voids) {
+				getContentResolver().insert(URI_SEARCH_ITEM,item.getContentValue());
+				return null;
 			}
-			return null;
-		}
+		}.execute();
 	}
+
 
 	@Override
 	public void onBackPressed() {

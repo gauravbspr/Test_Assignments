@@ -14,7 +14,7 @@ import static com.example.shashank.wikisample.Utility.AppConstants._ID;
 
 public class ItemViewModel extends BaseObservable {
 
-	private int id;
+	private long id;
 	private String name;
 	private String thumbnail;
 	private String description;
@@ -52,7 +52,7 @@ public class ItemViewModel extends BaseObservable {
 		this.local = local;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

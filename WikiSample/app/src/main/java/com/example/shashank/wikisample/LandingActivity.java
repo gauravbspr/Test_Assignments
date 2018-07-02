@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -37,19 +38,15 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 		super.onCreate(savedInstanceState);
 		activityBinding = DataBindingUtil.setContentView(this,R.layout.activity_landing);
 		setView();
-
+		getSupportLoaderManager().initLoader(DATABASE_ACCESS_ID,null, loaderCallback);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		getSupportLoaderManager().initLoader(DATABASE_ACCESS_ID,null, loaderCallback).forceLoad();
-	}
 
 	private void setView(){
 		setSupportActionBar(activityBinding.toolbar);
 		dataItems = new ArrayList<>();
 		adapter = new SearchItemAdapter(dataItems,LandingActivity.this);
+		activityBinding.searchView.setIconified(false);
 		activityBinding.searchView.setQueryHint(getString(R.string.search));
 		activityBinding.recyclerView.setAdapter(adapter);
 		activityBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -78,12 +75,19 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 
 				return false;
 			}
+
 		});
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		activityBinding.searchView.setQuery("",false);
 	}
 
 	private void runNetworkOperation(String keyword){
@@ -103,21 +107,22 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 
 		@Override
 		public void onLoadFinished(Loader<ArrayList<ItemViewModel>> loader, ArrayList<ItemViewModel> data) {
-			if(data.size()>0)
-				activityBinding.setVisibility(false);
-			else
-				activityBinding.setVisibility(true);
 			dataItems = data;
 			setData(dataItems);
 		}
 
 		@Override
 		public void onLoaderReset(Loader<ArrayList<ItemViewModel>> loader) {
+			Log.e("reset-->","reset");
 		}
 	};
 
 
 	private void setData(ArrayList<ItemViewModel> data){
+		if(data.size()>0)
+			activityBinding.setVisibility(false);
+		else
+			activityBinding.setVisibility(true);
 		adapter.data = data;
 		adapter.notifyDataSetChanged();
 	}

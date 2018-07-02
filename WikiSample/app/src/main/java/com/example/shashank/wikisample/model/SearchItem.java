@@ -3,6 +3,8 @@ package com.example.shashank.wikisample.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.json.JSONException;
@@ -23,9 +25,9 @@ public class SearchItem {
 	public static final String ITEM_COLUMN_THUMBNAIL = "thumbnail";
 	public static final String ITEM_COLUMN_DESCRIPTION = "description";
 
-	@PrimaryKey(autoGenerate = false)
-	@ColumnInfo(name = ITEM_COLUMN_ID)
-	private int id;
+	@PrimaryKey()
+	@ColumnInfo(name = ITEM_COLUMN_ID,index = true)
+	private long id;
 
 	@ColumnInfo(name = ITEM_COLUMN_NAME)
 	private String name;
@@ -38,7 +40,7 @@ public class SearchItem {
 
 
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -83,4 +85,23 @@ public class SearchItem {
 		this.description = "";
 	}
 
+	public SearchItem(ContentValues values){
+		if(values.containsKey(_ID))
+			this.id = values.getAsInteger(_ID);
+		if(values.containsKey(NAME))
+			this.name = values.getAsString(NAME);
+		if(values.containsKey(THUMBNAIL))
+			this.thumbnail = values.getAsString(THUMBNAIL);
+		if (values.containsKey(DESCRIPTION))
+			this.description = values.getAsString(DESCRIPTION);
+	}
+
+	public ContentValues getContentValue(){
+		ContentValues values = new ContentValues();
+		values.put(_ID,id);
+		values.put(NAME,name);
+		values.put(THUMBNAIL,thumbnail);
+		values.put(DESCRIPTION,description);
+		return values;
+	}
 }

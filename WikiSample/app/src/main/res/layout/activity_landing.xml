@@ -30,6 +30,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:focusedByDefault="true"
+                    android:focusable="true"
                     app:queryHint="@string/search"
                     android:animateLayoutChanges="true"
                     android:layout_marginRight="10dp"/>
@@ -38,18 +39,13 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
-
-        </android.support.v4.widget.NestedScrollView>
+                android:layout_height="wrap_content"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
