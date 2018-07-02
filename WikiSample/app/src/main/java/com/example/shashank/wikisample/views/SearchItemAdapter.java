@@ -118,6 +118,7 @@ public class SearchItemAdapter extends RecyclerView.Adapter<SearchItemAdapter.It
 								super.onPostExecute(aVoid);
 								data.remove(position);
 								notifyItemRemoved(position);
+								notifyItemRangeChanged(position, data.size());
 							}
 						}.execute();
 						return false;
