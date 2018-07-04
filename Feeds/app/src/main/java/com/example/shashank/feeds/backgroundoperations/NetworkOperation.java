@@ -23,11 +23,13 @@ import static com.example.shashank.feeds.Utility.AppConstants.TITLE;
 import static com.example.shashank.feeds.Utility.AppConstants.ROWS;
 import static com.example.shashank.feeds.Utility.AppConstants.THUMBNAIL;
 import static com.example.shashank.feeds.provider.CustomContentProvider.URI_FEED_ITEM;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 public class NetworkOperation extends AsyncTask<String,Void,String> {
 
 	private Context context;
 	private ResponseHandle callback;
+	private int responseCode;
 
 	public NetworkOperation(Context context,ResponseHandle responseHandle){
 		this.context = context;
@@ -47,16 +49,19 @@ public class NetworkOperation extends AsyncTask<String,Void,String> {
 			urlConnection.connect();
 
 			// Read the input stream into a String
-			InputStream inputStream = urlConnection.getInputStream();
-			StringBuffer buffer = new StringBuffer();
-			if (inputStream == null) return null;
+			responseCode = urlConnection.getResponseCode();
+			if(responseCode == HTTP_OK) {
+				InputStream inputStream = urlConnection.getInputStream();
+				StringBuffer buffer = new StringBuffer();
+				if (inputStream == null) return null;
 
-			reader = new BufferedReader(new InputStreamReader(inputStream));
-			while ((line = reader.readLine()) != null) buffer.append(line);
+				reader = new BufferedReader(new InputStreamReader(inputStream));
+				while ((line = reader.readLine()) != null) buffer.append(line);
 
-			if (buffer.length() == 0) return null;
-			String response = buffer.toString();
-			return getResponseData(response);
+				if (buffer.length() == 0) return null;
+				String response = buffer.toString();
+				return getResponseData(response);
+			}
 		} catch (IOException e) {
 			Log.e("NetworkOperation", Log.getStackTraceString(e));
 		} finally {
@@ -76,7 +81,7 @@ public class NetworkOperation extends AsyncTask<String,Void,String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		callback.onResponse(result);
+		callback.onResponse(responseCode,result);
 	}
 
 	public String getResponseData(String result) {

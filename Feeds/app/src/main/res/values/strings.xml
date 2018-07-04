@@ -3,4 +3,5 @@
     <string name="delete">Delete</string>
     <string name="no_feeds_available">No Feed Available</string>
     <string name="no_connectivity">No Connectivity</string>
+    <string name="error">Some error has occured</string>
 </resources>

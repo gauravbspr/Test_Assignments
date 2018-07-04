@@ -2,5 +2,5 @@ package com.example.shashank.feeds.backgroundoperations;
 
 public interface ResponseHandle {
 
-	void onResponse(String title);
+	void onResponse(int responseCode,String title);
 }

@@ -1,6 +1,8 @@
 package com.example.shashank.feeds;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -22,6 +24,7 @@ import com.example.shashank.feeds.views.FeedsItemAdapter;
 import java.util.ArrayList;
 
 import static com.example.shashank.feeds.Utility.AppConstants.BASE_URL;
+import static java.net.HttpURLConnection.HTTP_OK;
 
 public class LandingActivity extends AppCompatActivity implements ResponseHandle{
 
@@ -42,10 +45,8 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 		//initiating loader callback
 		getSupportLoaderManager().initLoader(DATABASE_ACCESS_ID,null, loaderCallback);
 
-		if(db.itemDao().getCount() == 0) {
-			activityBinding.refreshLayout.setRefreshing(true);
-			makeApiCall();
-		}
+		//default api call happens if no data it available
+		checkForData();
 	}
 
 
@@ -57,8 +58,7 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 		activityBinding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				if(!activityBinding.refreshLayout.isRefreshing())
-					makeApiCall();
+				makeApiCall();
 			}
 		});
 	}
@@ -108,9 +108,32 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 	}
 
 	@Override
-	public void onResponse(String title) {
-		if(title != null && !title.isEmpty())
-			getSupportActionBar().setTitle(title);
+	public void onResponse(int responseCode, String title) {
+		if(responseCode == HTTP_OK)
+			if(title != null && !title.isEmpty())
+				getSupportActionBar().setTitle(title);
+			else
+				showSnackBar(getString(R.string.error));
+		else
+			showSnackBar(getString(R.string.error));
 		activityBinding.refreshLayout.setRefreshing(false);
+	}
+
+
+	@SuppressLint("StaticFieldLeak")
+	private void checkForData(){
+		new AsyncTask<Void,Void,Integer>(){
+			@Override
+			protected Integer doInBackground(Void... voids) {
+				return db.itemDao().getCount();
+			}
+
+			@Override
+			protected void onPostExecute(Integer value) {
+				super.onPostExecute(value);
+				if(value == 0)
+					makeApiCall();
+			}
+		}.execute();
 	}
 }

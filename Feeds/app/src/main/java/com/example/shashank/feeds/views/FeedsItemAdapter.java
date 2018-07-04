@@ -2,6 +2,7 @@ package com.example.shashank.feeds.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
@@ -18,6 +19,8 @@ import com.example.shashank.feeds.ViewModel.ItemViewModel;
 import com.example.shashank.feeds.database.ItemDatabase;
 import com.example.shashank.feeds.databinding.ItemBinding;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
@@ -84,8 +87,31 @@ public class FeedsItemAdapter extends RecyclerView.Adapter<FeedsItemAdapter.Item
 					return false;
 				}
 			});
-			if(item.getThumbnail() != null && !item.getThumbnail().isEmpty())
-				imageLoader.displayImage(item.getThumbnail(),itemBinding.image);
+			if(item.getThumbnail() != null && !item.getThumbnail().isEmpty()) {
+				imageLoader.loadImage(item.getThumbnail(), new ImageLoadingListener() {
+					@Override
+					public void onLoadingStarted(String imageUri, View view) {
+						itemBinding.setVisibility(true);
+					}
+
+					@Override
+					public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+						itemBinding.setVisibility(false);
+						itemBinding.image.setImageResource(R.drawable.ic_launcher_foreground);
+					}
+
+					@Override
+					public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+						itemBinding.setVisibility(false);
+						itemBinding.image.setImageBitmap(loadedImage);
+					}
+
+					@Override
+					public void onLoadingCancelled(String imageUri, View view) {
+						itemBinding.setVisibility(false);
+					}
+				});
+			}
 		}
 
 	}
