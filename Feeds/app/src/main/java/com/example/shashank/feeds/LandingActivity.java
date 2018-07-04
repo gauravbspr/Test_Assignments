@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
@@ -20,6 +21,7 @@ import com.example.shashank.feeds.backgroundoperations.ResponseHandle;
 import com.example.shashank.feeds.database.ItemDatabase;
 import com.example.shashank.feeds.databinding.LandingBinding;
 import com.example.shashank.feeds.views.FeedsItemAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -34,12 +36,14 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 	private FeedsItemAdapter adapter;
 	private ArrayList<ItemViewModel> dataItems;
 	private ItemDatabase db;
+	private ImageLoader imageLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		activityBinding = DataBindingUtil.setContentView(this,R.layout.activity_landing);
 		db = ItemDatabase.getInstance(getApplicationContext());
+		imageLoader = Utils.getImageLoader(getApplicationContext());
 		initView();
 
 		//initiating loader callback
@@ -59,6 +63,16 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 			@Override
 			public void onRefresh() {
 				makeApiCall();
+			}
+		});
+		activityBinding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				super.onScrollStateChanged(recyclerView, newState);
+				if(newState == RecyclerView.SCROLL_STATE_DRAGGING)
+					imageLoader.pause();
+				else if(newState == RecyclerView.SCROLL_STATE_SETTLING)
+					imageLoader.resume();
 			}
 		});
 	}

@@ -8,10 +8,6 @@
         <variable
             name="event"
             type="com.example.shashank.feeds.Presenter.ClickEvent"/>
-        <import type="android.view.View"/>
-        <variable
-            name="visibility"
-            type="java.lang.Boolean"/>
     </data>
 
     <LinearLayout
@@ -30,23 +26,15 @@
             android:orientation="horizontal"
             android:padding="@dimen/default_padding">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/image"
-                    android:layout_width="@dimen/tumbnail_size"
-                    android:layout_height="@dimen/tumbnail_size"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_launcher_foreground"
-                    android:background="@drawable/ic_launcher_background"/>
-
-                <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="@{visibility ? View.VISIBLE : View.GONE}"/>
-            </FrameLayout>
+                    android:scaleType="fitXY"
+                    android:maxWidth="@dimen/tumbnail_size"
+                    android:maxHeight="@dimen/tumbnail_size"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_launcher_background"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -21,7 +21,6 @@ public class Utils {
 	private static ImageLoader imageLoader;
 
 	public static ImageLoader getImageLoader(Context ctx) {
-
 		if (imageLoader == null) {
 			imageLoader = ImageLoader.getInstance();
 			DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
@@ -29,7 +28,10 @@ public class Utils {
 					.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2).resetViewBeforeLoading(true)
 					.considerExifParams(true).displayer(new FadeInBitmapDisplayer(200, true, true, false))
 					.build();
-			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx).memoryCache(new WeakMemoryCache()).defaultDisplayImageOptions(defaultOptions).build();
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(ctx).
+					memoryCache(new WeakMemoryCache())
+					.diskCacheSize(100 * 1024 * 1024)
+					.defaultDisplayImageOptions(defaultOptions).build();
 			imageLoader.init(config);
 		}
 		return imageLoader;

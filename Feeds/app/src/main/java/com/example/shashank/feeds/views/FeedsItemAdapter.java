@@ -70,6 +70,9 @@ public class FeedsItemAdapter extends RecyclerView.Adapter<FeedsItemAdapter.Item
 			this.itemBinding = itemBinging;
 		}
 
+		/*
+		Binding feed data to view holder
+		 */
 		public void bind(final ItemViewModel item, final int position){
 			itemBinding.setItem(item);
 			itemBinding.setEvent(new ClickEvent() {
@@ -87,28 +90,25 @@ public class FeedsItemAdapter extends RecyclerView.Adapter<FeedsItemAdapter.Item
 					return false;
 				}
 			});
+			itemBinding.image.setImageBitmap(null);
 			if(item.getThumbnail() != null && !item.getThumbnail().isEmpty()) {
 				imageLoader.loadImage(item.getThumbnail(), new ImageLoadingListener() {
 					@Override
 					public void onLoadingStarted(String imageUri, View view) {
-						itemBinding.setVisibility(true);
 					}
 
 					@Override
 					public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-						itemBinding.setVisibility(false);
 						itemBinding.image.setImageResource(R.drawable.ic_launcher_foreground);
 					}
 
 					@Override
 					public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-						itemBinding.setVisibility(false);
 						itemBinding.image.setImageBitmap(loadedImage);
 					}
 
 					@Override
 					public void onLoadingCancelled(String imageUri, View view) {
-						itemBinding.setVisibility(false);
 					}
 				});
 			}
@@ -116,6 +116,10 @@ public class FeedsItemAdapter extends RecyclerView.Adapter<FeedsItemAdapter.Item
 
 	}
 
+
+	/*
+		Displays popup to delete in long press
+	 */
 	private void handlePopup(View v,final int position) {
 		PopupMenu popupMenu = new PopupMenu(activity, v);
 		popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
