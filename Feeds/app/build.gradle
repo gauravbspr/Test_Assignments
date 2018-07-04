@@ -23,13 +23,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //android support
     implementation deps.support.appcompat
     implementation deps.support.recyclerview
     implementation deps.support.design
+
+    //Room persistence library
     annotationProcessor deps.room.compiler
     implementation deps.room.runtime
 
+    //Universal image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

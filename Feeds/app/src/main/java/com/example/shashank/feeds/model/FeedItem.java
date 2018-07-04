@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import org.json.JSONObject;
 
 import static com.example.shashank.feeds.Utility.AppConstants.DESCRIPTION;
-import static com.example.shashank.feeds.Utility.AppConstants.NAME;
+import static com.example.shashank.feeds.Utility.AppConstants.TITLE;
 import static com.example.shashank.feeds.Utility.AppConstants.THUMBNAIL;
 import static com.example.shashank.feeds.model.FeedItem.FEEDS_ITEM_TABLE;
 
@@ -34,7 +34,7 @@ public class FeedItem {
 	private long id;
 
 	@ColumnInfo(name = ITEM_COLUMN_TITLE)
-	private String name;
+	private String title;
 
 	@ColumnInfo(name = ITEM_COLUMN_THUMBNAIL)
 	private String thumbnail;
@@ -50,12 +50,12 @@ public class FeedItem {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getThumbnail() {
@@ -76,7 +76,7 @@ public class FeedItem {
 
 
 	public FeedItem(JSONObject object){
-		this.setName(object.optString(NAME));
+		this.setTitle(object.optString(TITLE));
 		this.setDescription(object.optString(DESCRIPTION));
 		this.setThumbnail(object.optString(THUMBNAIL));
 	}
@@ -88,8 +88,8 @@ public class FeedItem {
 
 	public FeedItem(ContentValues values){
 		if(values !=null) {
-			if (values.containsKey(NAME))
-				this.name = values.getAsString(NAME);
+			if (values.containsKey(TITLE))
+				this.title = values.getAsString(TITLE);
 			if (values.containsKey(THUMBNAIL))
 				this.thumbnail = values.getAsString(THUMBNAIL);
 			if (values.containsKey(DESCRIPTION))
@@ -102,7 +102,7 @@ public class FeedItem {
 
 	public ContentValues getContentValue(){
 		ContentValues values = new ContentValues();
-		values.put(NAME, name);
+		values.put(TITLE, title);
 		values.put(THUMBNAIL,thumbnail);
 		values.put(DESCRIPTION,description);
 		return values;

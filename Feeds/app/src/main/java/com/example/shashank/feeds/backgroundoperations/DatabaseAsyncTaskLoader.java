@@ -54,7 +54,7 @@ public class DatabaseAsyncTaskLoader extends AsyncTaskLoader<ArrayList<ItemViewM
 			while (cursor.moveToNext()) {
 				FeedItem item = new FeedItem();
 				item.setId(cursor.getInt(cursor.getColumnIndex(ITEM_COLUMN_ID)));
-				item.setName(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_TITLE)));
+				item.setTitle(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_TITLE)));
 				item.setDescription(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_DESCRIPTION)));
 				item.setThumbnail(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_THUMBNAIL)));
 				ItemViewModel viewModel = new ItemViewModel(item);

@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.shashank.feeds.Utility.AppConstants.DESCRIPTION;
-import static com.example.shashank.feeds.Utility.AppConstants.NAME;
+import static com.example.shashank.feeds.Utility.AppConstants.TITLE;
 import static com.example.shashank.feeds.Utility.AppConstants.THUMBNAIL;
 
 public class ItemViewModel extends BaseObservable {
@@ -23,7 +23,7 @@ public class ItemViewModel extends BaseObservable {
 
 	public ItemViewModel(FeedItem item) {
 		this.item = item;
-		this.title = item.getName();
+		this.title = item.getTitle();
 		this.thumbnail = item.getThumbnail();
 		this.description = item.getDescription();
 		local = false;
@@ -32,7 +32,7 @@ public class ItemViewModel extends BaseObservable {
 	public String toString(){
 		JSONObject object = new JSONObject();
 		try {
-			object.put(NAME,this.title);
+			object.put(TITLE,this.title);
 			object.put(DESCRIPTION,this.description);
 			object.put(THUMBNAIL,this.thumbnail);
 		}catch (JSONException e){
