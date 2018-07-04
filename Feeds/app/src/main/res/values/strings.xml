@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Feeds</string>
+    <string name="delete">Delete</string>
+    <string name="no_feeds_available">No Feed Available</string>
 </resources>

@@ -3,6 +3,7 @@
 buildscript {
     
     repositories {
+        apply from:'version.gradle'
         google()
         jcenter()
     }
