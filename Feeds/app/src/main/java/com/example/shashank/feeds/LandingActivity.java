@@ -1,6 +1,7 @@
 package com.example.shashank.feeds;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,7 @@ import static java.net.HttpURLConnection.HTTP_OK;
 public class LandingActivity extends AppCompatActivity implements ResponseHandle{
 
 	public static final int DATABASE_ACCESS_ID = 1;
+	public static final String DATA = "data";
 
 	private LandingBinding activityBinding;
 	private FeedsItemAdapter adapter;
@@ -133,6 +135,12 @@ public class LandingActivity extends AppCompatActivity implements ResponseHandle
 		activityBinding.refreshLayout.setRefreshing(false);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if(dataItems != null)
+			outState.putParcelableArrayList(DATA,dataItems);
+	}
 
 	@SuppressLint("StaticFieldLeak")
 	private void checkForData(){

@@ -58,7 +58,6 @@ public class DatabaseAsyncTaskLoader extends AsyncTaskLoader<ArrayList<ItemViewM
 				item.setDescription(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_DESCRIPTION)));
 				item.setThumbnail(cursor.getString(cursor.getColumnIndex(ITEM_COLUMN_THUMBNAIL)));
 				ItemViewModel viewModel = new ItemViewModel(item);
-				viewModel.setLocal(true);
 				data.add(viewModel);
 			}
 			cursor.close();

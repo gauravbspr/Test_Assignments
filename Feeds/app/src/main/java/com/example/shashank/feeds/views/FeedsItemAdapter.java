@@ -83,10 +83,7 @@ public class FeedsItemAdapter extends RecyclerView.Adapter<FeedsItemAdapter.Item
 
 				@Override
 				public boolean onLongClick() {
-					if(item.isLocal()) {
-						handlePopup(itemBinding.getRoot(), position);
-						return false;
-					}
+					handlePopup(itemBinding.getRoot(), position);
 					return false;
 				}
 			});

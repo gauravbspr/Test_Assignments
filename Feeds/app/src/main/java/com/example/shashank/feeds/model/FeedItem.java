@@ -75,10 +75,10 @@ public class FeedItem {
 	}
 
 
-	public FeedItem(JSONObject object){
-		this.setTitle(object.optString(TITLE));
-		this.setDescription(object.optString(DESCRIPTION));
-		this.setThumbnail(object.optString(THUMBNAIL));
+	public FeedItem(String title, String description, String thumbnail) {
+		this.title = title;
+		this.thumbnail = thumbnail;
+		this.description = description;
 	}
 
 	public FeedItem(){

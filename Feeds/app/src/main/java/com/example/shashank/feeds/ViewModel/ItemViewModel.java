@@ -1,6 +1,8 @@
 package com.example.shashank.feeds.ViewModel;
 
 import android.databinding.BaseObservable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.example.shashank.feeds.model.FeedItem;
 
@@ -11,13 +13,12 @@ import static com.example.shashank.feeds.Utility.AppConstants.DESCRIPTION;
 import static com.example.shashank.feeds.Utility.AppConstants.TITLE;
 import static com.example.shashank.feeds.Utility.AppConstants.THUMBNAIL;
 
-public class ItemViewModel extends BaseObservable {
+public class ItemViewModel extends BaseObservable implements Parcelable{
 
 	private long id;
 	private String title;
 	private String thumbnail;
 	private String description;
-	private boolean local;
 
 	private FeedItem item;
 
@@ -26,7 +27,6 @@ public class ItemViewModel extends BaseObservable {
 		this.title = item.getTitle();
 		this.thumbnail = item.getThumbnail();
 		this.description = item.getDescription();
-		local = false;
 	}
 
 	public String toString(){
@@ -39,14 +39,6 @@ public class ItemViewModel extends BaseObservable {
 			e.printStackTrace();
 		}
 		return object.toString();
-	}
-
-	public boolean isLocal() {
-		return local;
-	}
-
-	public void setLocal(boolean local) {
-		this.local = local;
 	}
 
 	public long getId() {
@@ -84,4 +76,38 @@ public class ItemViewModel extends BaseObservable {
 	public FeedItem getItem() {
 		return item;
 	}
+
+
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public ItemViewModel(Parcel in) {
+		String[] data = new String[3];
+		in.readStringArray(data);
+		this.title = data[0];
+		this.description = data[1];
+		this.thumbnail = data[2];
+		this.id = in.readLong();
+		this.item = new FeedItem(title,description,thumbnail);
+		this.item.setId(this.id);
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeStringArray(new String[]{this.title,this.description,this.thumbnail});
+		dest.writeLong(this.id);
+	}
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+		public ItemViewModel createFromParcel(Parcel in) {
+			return new ItemViewModel(in);
+		}
+
+		public ItemViewModel[] newArray(int size) {
+			return new ItemViewModel[size];
+		}
+	};
 }
